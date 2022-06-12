@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { Component, OnInit } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-shop',
@@ -25,15 +26,15 @@ export class ShopComponent implements OnInit {
   color = 'gold';
 
   // TODO: #7. Create selectable controls with Angular Material
-  fillings = {
-    bokchoy: true,
-    tofu: true,
-    chicken: false,
-    impossible: false,
-  };
-
+  fillings: string[] = [
+    'bokchoy',
+    'tofu',
+    'chicken',
+    'impossible',
+  ];
+  selectedFillings: string[] = [];
   // TODO: #11. Announce changes with LiveAnnouncer
-  constructor() { }
+  constructor( private liveAnnouncer: LiveAnnouncer) { }
 
   ngOnInit(): void { }
 
@@ -49,14 +50,14 @@ export class ShopComponent implements OnInit {
     let flavor = '';
 
     // TODO: #7. Create selectable controls with Angular Material
-    if (this.fillings.bokchoy) { flavor += 'Bok Choy '; }
-    if (this.fillings.tofu) { flavor += 'Tofu & Mushroom '; }
-    if (this.fillings.chicken) { flavor += 'Chicken & Ginger '; }
-    if (this.fillings.impossible) { flavor += 'Impossible Meat '; }
+    this.selectedFillings.forEach(filling => {
+      flavor = flavor + ' ' + filling;
+    });
 
     const fakePurchase = `Purchase ${this.quantity} ${flavor}dumplings in the color ${this.color}!`;
     console.log(fakePurchase);
 
     // TODO: #11. Announce changes with LiveAnnouncer
+    this.liveAnnouncer.announce(fakePurchase)
   }
 }
